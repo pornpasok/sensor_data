@@ -63,6 +63,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html>
+<meta http-equiv="refresh" content="30">
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <style>
