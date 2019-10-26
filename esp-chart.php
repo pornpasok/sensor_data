@@ -27,7 +27,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT id, value1, value2, value3, reading_time FROM Sensor order by reading_time desc limit 40";
+$sql = "SELECT id, value1, value2, value3, reading_time FROM sensor order by reading_time desc limit 40";
 
 $result = $conn->query($sql);
 
