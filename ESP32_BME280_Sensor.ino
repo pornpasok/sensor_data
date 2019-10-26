@@ -112,5 +112,8 @@ void loop() {
     Serial.println("WiFi Disconnected");
   }
   //Send an HTTP POST request every 30 seconds
-  delay(30000);  
+  //delay(30000);  
+  // Deep Sleep 60 seconds
+  Serial.println("Sleeping 60 seconds ..");
+  ESP.deepSleep(58e6); // 60e6 is 60 microsecondsESP.
 }
