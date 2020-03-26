@@ -30,7 +30,7 @@ Adafruit_BME280 bme;  // I2C
 float v;
 int value = 0;
 void connect() {
-   // We start by connecting to a WiFi network
+  // We start by connecting to a WiFi network
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -61,56 +61,53 @@ void connect() {
   // Use WiFiClient class to create TCP connections
   
   if(WiFi.status()== WL_CONNECTED){
-      HTTPClient http;
+    HTTPClient http;
+    // Your Domain name with URL path or IP address with path
+    http.begin(serverName);
+    // Specify content-type header
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    // Prepare your HTTP POST request data
+    String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
+                          + "&location=" + sensorLocation + "&value1=" + String(bme.readTemperature())
+                          + "&value2=" + String(bme.readHumidity()) + "&value3=" + String(bme.readPressure()/100.0F) + "&value4=" + v + "";
+    Serial.print("httpRequestData: ");
+    Serial.println(httpRequestData);
 
-      // Your Domain name with URL path or IP address with path
-      http.begin(serverName);
+    // You can comment the httpRequestData variable above
+    // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
+    //String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
 
-      // Specify content-type header
-      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    // Send HTTP POST request
+    int httpResponseCode = http.POST(httpRequestData);
 
-      // Prepare your HTTP POST request data
-      String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
-                            + "&location=" + sensorLocation + "&value1=" + String(bme.readTemperature())
-                            + "&value2=" + String(bme.readHumidity()) + "&value3=" + String(bme.readPressure()/100.0F) + "&value4=" + v + "";
-      Serial.print("httpRequestData: ");
-      Serial.println(httpRequestData);
+    // Show Connect Status
+    digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);
 
-      // You can comment the httpRequestData variable above
-      // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
-      //String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
+    // If you need an HTTP request with a content type: text/plain
+    //http.addHeader("Content-Type", "text/plain");
+    //int httpResponseCode = http.POST("Hello, World!");
 
-      // Send HTTP POST request
-      int httpResponseCode = http.POST(httpRequestData);
+    // If you need an HTTP request with a content type: application/json, use the following:
+    //http.addHeader("Content-Type", "application/json");
+    //int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
 
-      // Show Connect Status
-      digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
-      delay(1000);
-
-      // If you need an HTTP request with a content type: text/plain
-      //http.addHeader("Content-Type", "text/plain");
-      //int httpResponseCode = http.POST("Hello, World!");
-
-      // If you need an HTTP request with a content type: application/json, use the following:
-      //http.addHeader("Content-Type", "application/json");
-      //int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
-
-      if (httpResponseCode>0) {
-        Serial.print("HTTP Response code: ");
-        Serial.println(httpResponseCode);
-      }
-      else {
-        Serial.print("Error code: ");
-        Serial.println(httpResponseCode);
-      }
-      // Free resources
-      http.end();
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(1000);
-   }
-   else {
-    Serial.println("WiFi Disconnected");
-   }
+    if (httpResponseCode>0) {
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+    }
+    else {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+    // Free resources
+    http.end();
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(1000);
+  }
+  else {
+   Serial.println("WiFi Disconnected");
+  }
 }
 void setup() {
   Serial.begin(115200);
