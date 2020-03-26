@@ -14,11 +14,11 @@
 ADC_MODE(ADC_VCC);
 
 const char* ssid = "tono.io";
-const char* password = "0863741677";
+const char* password = "********";
 
 const char* serverName = "http://tonofarm.herokuapp.com/esp-post-data.php";
 
-String apiKeyValue = "tonofarm.io";
+String apiKeyValue = "****";
 String sensorName = "BME280";
 String sensorLocation = "13.7868709,100.5457628";
 
